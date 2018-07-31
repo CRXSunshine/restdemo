@@ -8,9 +8,11 @@ import org.hamcrest.Matchers;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.mockito.Mock;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
+import org.springframework.mock.web.MockHttpServletRequest;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.ResultMatcher;
@@ -18,9 +20,7 @@ import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.web.context.WebApplicationContext;
 
 import static org.springframework.test.web.client.match.MockRestRequestMatchers.content;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -50,56 +50,55 @@ public class UserTest {
     @Test
     public void saveUser(){
         User user=new User();
-        user.setId("20150611");
-        user.setUsername("头号玩家");
+        user.setId("20150612");
+        user.setUsername("Mr chen");
         user.setPassword("123456");
         String json=JSON.toJSONString(user);
-        try {
-            mockMvc.perform(post("/user")
-                    .contentType(MediaType.APPLICATION_JSON_UTF8)
-                    .param(json)
-                    .accept(MediaType.APPLICATION_JSON))  //接收的类型
-                    .andExpect(status().isOk())   //判断接收到的状态是否是200
-                    .andDo(print())  //打印内容
-                    .andExpect((ResultMatcher) content().contentType(MediaType.APPLICATION_JSON_UTF8)).andExpect((ResultMatcher) content().string(Matchers.containsString("OK"))); //匹配返回值中的内容
-        } catch (Exception e) {
-            e.printStackTrace();
+        if(!"".equals(json)){
+            try {
+                mockMvc.perform(post("/user")
+                        .contentType(MediaType.APPLICATION_JSON_UTF8)
+                        .content(json)
+                        .accept(MediaType.APPLICATION_JSON))  //接收的类型
+                        .andExpect(status().isOk())   //判断接收到的状态是否是200
+                        .andDo(print());  //打印内容
+
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+            System.out.println(json);
         }
-        System.out.println(json);
+
     }
 
     @Test
-    public void updateUser(){
+    public void queryByUserId(){
+       String id="20150612";
+            try {
+                mockMvc.perform(get("/user/"+id)
+                        .contentType(MediaType.APPLICATION_JSON_UTF8)
+                        .accept(MediaType.APPLICATION_JSON))  //接收的类型
+                        .andExpect(status().isOk())   //判断接收到的状态是否是200
+                        .andDo(print());  //打印内容
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+    }
+
+    @Test
+    public void updateUser() {
         User user=new User();
-        user.setId("20150611");
+        user.setId("20150612");
         user.setUsername("奇点");
         user.setPassword("123456");
         String json=JSON.toJSONString(user);
         try {
             mockMvc.perform(put("/user")
                     .contentType(MediaType.APPLICATION_JSON_UTF8)
-                    .param(json)
+                    .content(json)
                     .accept(MediaType.APPLICATION_JSON))  //接收的类型
                     .andExpect(status().isOk())   //判断接收到的状态是否是200
-                    .andDo(print())  //打印内容
-                    .andExpect((ResultMatcher) content().contentType(MediaType.APPLICATION_JSON_UTF8)).andExpect((ResultMatcher) content().string(Matchers.containsString("OK"))); //匹配返回值中的内容
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        System.out.println(json);
-    }
-
-    @Test
-    public void queryByUserId() {
-        String id="20150611";
-        try {
-            mockMvc.perform(put("/user")
-                    .contentType(MediaType.APPLICATION_JSON_UTF8)
-                    .param(id)
-                    .accept(MediaType.APPLICATION_JSON))  //接收的类型
-                    .andExpect(status().isOk())   //判断接收到的状态是否是200
-                    .andDo(print())  //打印内容
-                    .andExpect((ResultMatcher) content().contentType(MediaType.APPLICATION_JSON_UTF8)).andExpect((ResultMatcher) content().string(Matchers.containsString("OK"))); //匹配返回值中的内容
+                    .andDo(print());  //打印内容
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -110,13 +109,12 @@ public class UserTest {
     public void deleteByUserId() {
         String id="20150611";
         try {
-            mockMvc.perform(delete("/user")
+            mockMvc.perform(delete("/user/"+id)
                     .contentType(MediaType.APPLICATION_JSON_UTF8)
-                    .param(id)
                     .accept(MediaType.APPLICATION_JSON))  //接收的类型
                     .andExpect(status().isOk())   //判断接收到的状态是否是200
-                    .andDo(print())  //打印内容
-                    .andExpect((ResultMatcher) content().contentType(MediaType.APPLICATION_JSON_UTF8)).andExpect((ResultMatcher) content().string(Matchers.containsString("OK"))); //匹配返回值中的内容
+                    .andDo(print());  //打印内容
+
         } catch (Exception e) {
             e.printStackTrace();
         }
