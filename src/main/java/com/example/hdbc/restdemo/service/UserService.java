@@ -5,6 +5,8 @@ import com.example.hdbc.restdemo.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 /**
  * @author:Kevin
  * @version:
@@ -33,6 +35,10 @@ public class UserService {
 
     public User getUserById(String id){
         return userRepository.findById(id).get();
+    }
+
+    public List<User> getUserList(){
+        return userRepository.findAll();
     }
 
 }

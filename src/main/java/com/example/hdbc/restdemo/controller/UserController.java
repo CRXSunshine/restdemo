@@ -1,9 +1,12 @@
 package com.example.hdbc.restdemo.controller;
 
+import com.example.hdbc.restdemo.common.utils.ResponseResults;
 import com.example.hdbc.restdemo.domain.User;
 import com.example.hdbc.restdemo.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 /**
  * @author:Kevin
@@ -16,22 +19,21 @@ import org.springframework.web.bind.annotation.*;
 @RestController
 public class UserController {
 
+    private final UserService userService;
+
     @Autowired
-    private UserService userService;
-
-
-    @GetMapping("/hello")
-    public String hello(@RequestParam("name") String name){
-        return "hello"+name;
+    public UserController(UserService userService) {
+        this.userService = userService;
     }
+
     /**
      * saveUser
      * @param user
      * @return User
      */
     @PostMapping("/user")
-    public User saveUser(@RequestBody User user){
-        return userService.saveUser(user);
+    public ResponseResults saveUser(@RequestBody User user){
+        return ResponseResults.responseBySuccess("ok",userService.saveUser(user));
     }
 
     /**
@@ -40,8 +42,8 @@ public class UserController {
      * @return User
      */
     @PutMapping("/user")
-    public User updateUser(@RequestBody  User  user){
-        return userService.updateUser(user);
+    public ResponseResults updateUser(@RequestBody  User  user){
+        return ResponseResults.responseBySuccess("ok",userService.updateUser(user));
     }
 
     /**
@@ -50,8 +52,8 @@ public class UserController {
      * @return String
      */
     @DeleteMapping("user/{id}")
-    public String deleteUserById(@PathVariable String  id){
-        return userService.deleteUserById(id);
+    public ResponseResults deleteUserById(@PathVariable String  id){
+        return ResponseResults.responseBySuccess("ok",userService.deleteUserById(id));
     }
 
     /**
@@ -60,8 +62,13 @@ public class UserController {
      * @return User
      */
     @GetMapping("user/{id}")
-    public User queryUserById(@PathVariable String id){
-        return userService.getUserById(id);
+    public ResponseResults queryUserById(@PathVariable String id){
+        return ResponseResults.responseBySuccess("ok",userService.getUserById(id));
+    }
+
+    @GetMapping("user")
+    public ResponseResults getUserList(){
+        return ResponseResults.responseBySuccess("ok",userService.getUserList());
     }
 
 

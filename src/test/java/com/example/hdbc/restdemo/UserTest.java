@@ -84,6 +84,18 @@ public class UserTest {
                 e.printStackTrace();
             }
     }
+    @Test
+    public void getUserList(){
+        try {
+            mockMvc.perform(get("/user")
+                    .contentType(MediaType.APPLICATION_JSON_UTF8)
+                    .accept(MediaType.APPLICATION_JSON))  //接收的类型
+                    .andExpect(status().isOk())   //判断接收到的状态是否是200
+                    .andDo(print());  //打印内容
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
 
     @Test
     public void updateUser() {
