@@ -10,7 +10,7 @@ import org.springframework.web.bind.annotation.*;
  * @version:
  * @Project: restdemo
  * @Package: com.example.hdbc.restdemo.controller
- * @Description:
+ * @Description: UserController
  * @Date date: 2018/7/30
  */
 @RestController
